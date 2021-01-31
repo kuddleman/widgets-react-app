@@ -1,14 +1,16 @@
 import React,  { useState, useEffect } from 'react' 
 import axios from 'axios' 
+import parse from 'html-react-parser'
 
 const Search = () => {
     const [ term, setTerm ] = useState('')
+    const [ results, setResults ] = useState( [] )
 
-   
+    console.log(results)
 
     useEffect(()=>{
        const search = async () => {
-           await axios.get('https://en.wikipedia.org/w/api.php', {
+           const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
                params: {
                    action: 'query',
                    list: 'search',
@@ -17,10 +19,27 @@ const Search = () => {
                    srsearch: term
                }
            }) 
-       }
 
-       search()
+           setResults(data.query.search)
+       }
+       if(term) search()
+       
     }, [term])
+
+    const renderedResults = results.map(result =>{
+        return (
+            <div key={results.pageid} className="item">
+                <div className="content">
+                    <div className="header">
+                        {result.title}
+                    </div>
+
+                    {/* <span dangerouslySetInnerHTML={{ __html: result.snippet }}></span> */}
+                    <span>{ parse(result.snippet) } </span>
+                </div>
+            </div>
+        )
+    })
 
     return (
         <div>
@@ -32,6 +51,9 @@ const Search = () => {
                             onChange={e => setTerm(e.target.value)}
                     />
                 </div>
+            </div>
+            <div className="ui celled list">
+                {renderedResults}
             </div>
         </div>
     )
