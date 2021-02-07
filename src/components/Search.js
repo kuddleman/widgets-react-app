@@ -3,7 +3,7 @@ import axios from 'axios'
 import parse from 'html-react-parser'
 
 const Search = () => {
-    const [ term, setTerm ] = useState('')
+    const [ term, setTerm ] = useState('programming')
     const [ results, setResults ] = useState( [] )
 
     console.log(results)
@@ -22,7 +22,15 @@ const Search = () => {
 
            setResults(data.query.search)
        }
-       if(term) search()
+       const timeoutId = setTimeout(() => {
+        if(term) {
+            search()
+        } 
+       }, 1000)
+
+       return () =>{
+           clearTimeout(timeoutId)
+       }
        
     }, [term])
 
