@@ -28,7 +28,10 @@ const Search = () => {
 
     const renderedResults = results.map(result =>{
         return (
-            <div key={results.pageid} className="item">
+            <div key={result.pageid} className="item">
+                <div className="right floated content">
+                    <a href={`https://en.wikpedia.org?curid=${result.pageid}`} className="ui button">GO</a>
+                </div>
                 <div className="content">
                     <div className="header">
                         {result.title}
